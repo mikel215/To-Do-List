@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Globalization;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace MikelsToDoListWPF
 {
@@ -25,6 +26,30 @@ namespace MikelsToDoListWPF
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            XmlDataProvider tasks = (XmlDataProvider)FindResource("tasks");
+            tasks.Document.Save("Tasks.xml");
+        }
+
+        private void TaskCalendar_OnIntialized(object sender, RoutedEventArgs e)
+        {
+            // Get the doc
+            XDocument doc = XDocument.Load("Tasks.xml");
+
+            // Create List
+            List<string> list = (from lv1 in doc.Descendants("Task")
+                                 select lv1.Element("Due").Value).ToList();
+
+            // Highlight the dates
+            foreach (string date in list)
+            {
+                DateTime DueDate = Convert.ToDateTime(date); 
+                TaskCalendar.SelectedDates.Add(DueDate);
+            }
+            TaskCalendar.SelectedDates.Add(new DateTime (2017, 2, 2));
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
@@ -54,6 +79,27 @@ namespace MikelsToDoListWPF
             XmlElement description = document.CreateElement("Description");
             description.InnerText = TaskDescription.Text;
             task.AppendChild(description);
+
+            // Create the Due Date Element
+            XmlElement duedate = document.CreateElement("Due");
+            duedate.InnerText = TaskDueDate.SelectedDate.Value.ToString("dddd, MMMM d, yyyy");
+            task.AppendChild(duedate);
+
+            document.DocumentElement.AppendChild(task);
+
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            if(TaskListBox.SelectedIndex != -1)
+            {
+
+                XmlElement task = (XmlElement)TaskListBox.SelectedItem;
+
+                task.ParentNode.RemoveChild(task);
+            }
+
         }
     }
 }

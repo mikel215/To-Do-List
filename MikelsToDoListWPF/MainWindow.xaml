@@ -4,8 +4,10 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:FsControls="clr-namespace:FsControls;assembly=FsCalendar"
                     xmlns:local="clr-namespace:MikelsToDoListWPF"
                     mc:Ignorable="d"
+                    Closing="Window_Closing"
                     Title="Mikel's To Do List" Height="500" Width="820">
   <Window.Resources>
          
@@ -49,14 +51,24 @@
     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200" />
-            <ColumnDefinition Width="200"/>
-            <ColumnDefinition Width="200"/>
-            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="125"/>
+            <ColumnDefinition Width="125"/>
+            <ColumnDefinition Width="350"/>
         </Grid.ColumnDefinitions>
         <!-- Middle, Display List -->
         <ListBox Name="TaskListBox" Grid.Row="0" Grid.Column="1"  Grid.ColumnSpan="2" ItemTemplate="{StaticResource TaskTemplate}" ItemsSource="{Binding Source={StaticResource tasks}}" />
-        <Button Name="CompleteButton" Grid.Row="1" Grid.Column="1" Margin="0,3,2,0" Content="Mark Completed" />
-        <Button Name="DeleteButton" Grid.Row="1" Grid.Column="2" Margin="2,3,0,0" Content="Delete Task" />
+        <Button Name="CompleteButton" Grid.Row="1" Grid.Column="1" Margin="3,3,3,2" Content="Mark Completed" />
+        <Button Name="DeleteButton" Grid.Row="1" Grid.Column="2" Margin="3,3,3,2" Content="Delete Task" Click="DeleteButton_Click" />
+        <Viewbox Grid.Row="0" Grid.Column="3" Width="330" >
+            <FsControls:FsCalendar x:Name="TaskCalendar" 
+                                   DisplayDate=
+                                   "{Binding Path=DisplayDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                   HorizontalAlignment="Center" 
+                                   HighlightedDateText=
+                                   "{Binding Path=HighlightedDateText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                   IsTodayHighlighted="True"
+                                   VerticalAlignment="Stretch" />
+        </Viewbox>
         <!-- Left Side, Add New Task -->
         <Grid Grid.Column="0">
             <Grid.ColumnDefinitions>
@@ -86,14 +98,14 @@
             <TextBox Name="TaskDescription" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" TextWrapping="Wrap" Margin="0,3,3,0" />
             <Label Grid.Row="4" Grid.Column="0" Content="Due Date:" />
             <DatePicker Name="TaskDueDate" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Margin="2,3,3,0" />
-            <Button Name="AddButton" Grid.Row="5" Grid.Column="0" Content="Add Task" Margin="0,3,2,0" />
+            <Button Name="AddButton" Grid.Row="5" Grid.Column="0" Content="Add Task" Margin="0,3,2,0" Click="AddButton_Click" />
             <Button Name="ClearButton" Grid.Row="5" Grid.Column="1" Content="Clear Forms" Margin="2,3,0,0" />
         </Grid>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="400"/>
-            <RowDefinition Height="35"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        
         
         
     </Grid>
