@@ -21,7 +21,7 @@ namespace MikelsToDoListWPF
 
 
 
-    public partial class MainWindow
+    public partial class MainWindow : Window
     {
         public MainWindow()
         {
@@ -32,6 +32,19 @@ namespace MikelsToDoListWPF
         {
             XmlDataProvider tasks = (XmlDataProvider)FindResource("tasks");
             tasks.Document.Save("Tasks.xml");
+        }
+
+        // Subscribes to the view model's RefreshRequested event.
+        private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            var mainWindowViewModel = (MainWindowViewModel)DataContext;
+            mainWindowViewModel.RefreshRequested += OnRefreshRequested;
+        }
+
+        // Refreshes calendar
+        private void OnRefreshRequested(object sender, EventArgs e)
+        {
+            this.TaskCalendar.Refresh();
         }
 
         private void TaskCalendar_OnIntialized(object sender, RoutedEventArgs e)
