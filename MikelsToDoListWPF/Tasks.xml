@@ -6,20 +6,20 @@
     <Priority>Low</Priority>
     <Done>No</Done>
     <Description>I need to do English Ch 5.</Description>
-    <Due> Sunday, January 29, 2017</Due>
+    <Due>Sunday, January 29, 2017</Due>
   </Task>
   <Task>
     <Name>Smoke Crack</Name>
     <Priority>High</Priority>
     <Done>No</Done>
     <Description>I need smoke some more crack.</Description>
-    <Due>Saurday, December 17, 2017</Due>
+    <Due>Saturday, December 17, 2016</Due>
   </Task>
   <Task>
     <Name>Rehearsal</Name>
     <Priority>Medium</Priority>
     <Done>No</Done>
     <Description>I need to go to band practice.</Description>
-    <Due>Tuesday, January 13, 2017</Due>
+    <Due>Friday, January 13, 2017</Due>
   </Task>
 </Tasks>

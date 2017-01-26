@@ -6,8 +6,7 @@ using System.Windows.Data;
 using System.Xml;
 using System.Xml.Linq;
 using System.Windows;
-
-
+using System.Text;
 
 namespace MikelsToDoListWPF
 {
@@ -147,6 +146,7 @@ namespace MikelsToDoListWPF
         /// </summary>
         private void SetMonthHighlighting()
         {
+            /*
             var displayMonth = this.DisplayDate.Month;
             var displayYear = this.DisplayDate.Year;
 
@@ -154,18 +154,15 @@ namespace MikelsToDoListWPF
             var month = this.DisplayDate.Month;
             var year = this.DisplayDate.Year;
             var lastDayOfMonth = DateTime.DaysInMonth(year, month);
+            */
 
             // Get xml document
-            XmlDocument document = XmlDocument.;
-            XmlElement dueDate = document.GetElementById("Due");
+            XDocument doc = XDocument.Load(@"C:\Users\Mik\Source\Repos\MikelsToDoList\MikelsToDoListWPF\bin\Debug\Tasks.xml");
+            XNamespace ns = doc.Root.Name.Namespace;
+            var xmlDates = doc.Descendants(ns + "Due").Select(e=> e.Value).ToList();
+            var list = p_HighlightedDateText;                                                
+            list.AddRange(xmlDates);
 
-            foreach (XElement date in dueDate)
-            {
-                var due = date.ToString();
-                DateTime dt = DateTime.Parse(due);
-                string dueD = dt.ToLongDateString();
-                p_HighlightedDateText.Add(dueD);
-            }
             // Refresh the calendar
             this.RequestRefresh();
         }
