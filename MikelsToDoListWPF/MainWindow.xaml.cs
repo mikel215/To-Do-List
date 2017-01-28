@@ -47,24 +47,6 @@ namespace MikelsToDoListWPF
             this.TaskCalendar.Refresh();
         }
 
-        private void TaskCalendar_OnIntialized(object sender, RoutedEventArgs e)
-        {
-            // Get the doc
-            XDocument doc = XDocument.Load("Tasks.xml");
-
-            // Create List
-            List<string> list = (from lv1 in doc.Descendants("Task")
-                                 select lv1.Element("Due").Value).ToList();
-
-            // Highlight the dates
-            foreach (string date in list)
-            {
-                DateTime DueDate = Convert.ToDateTime(date); 
-                TaskCalendar.SelectedDates.Add(DueDate);
-            }
-            TaskCalendar.SelectedDates.Add(new DateTime (2017, 2, 2));
-        }
-
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
             // Get the doc

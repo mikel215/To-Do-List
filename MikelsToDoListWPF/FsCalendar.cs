@@ -26,7 +26,7 @@ namespace MikelsToDoListWPF
 		public static DependencyProperty HighlightedDateTextProperty = DependencyProperty.Register
 			(
 				"HighlightedDateText",
-				typeof (String[]),
+				typeof (String[] ),
 				typeof (FsCalendar),
 				new PropertyMetadata()
 			);
@@ -114,7 +114,7 @@ namespace MikelsToDoListWPF
           /// <summary>
           /// Whether tool tips should be shown with highlights.
           /// </summary>
-          [Browsable(true)]
+          [Browsable(false)]
           [Category("Highlighting")]
           public bool ShowHighlightedDateText
           {

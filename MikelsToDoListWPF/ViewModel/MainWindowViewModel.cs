@@ -141,6 +141,13 @@ namespace MikelsToDoListWPF
             }
         }
 
+        // Due Date class for xml file query
+        class DueDate
+        {
+            public string due { get; set; }
+        }
+
+
         /// <summary>
         /// Sets highlighting for a month.
         /// </summary>
@@ -155,7 +162,6 @@ namespace MikelsToDoListWPF
             var year = this.DisplayDate.Year;
             var lastDayOfMonth = DateTime.DaysInMonth(year, month);
             */
-
             // Get xml document
             XDocument doc = XDocument.Load(@"C:\Users\Mik\Source\Repos\MikelsToDoList\MikelsToDoListWPF\bin\Debug\Tasks.xml");
             XNamespace ns = doc.Root.Name.Namespace;
@@ -163,7 +169,7 @@ namespace MikelsToDoListWPF
             var list = p_HighlightedDateText;                                                
             list.AddRange(xmlDates);
 
-            // Refresh the calendar
+                         // Refresh the calendar
             this.RequestRefresh();
         }
 
