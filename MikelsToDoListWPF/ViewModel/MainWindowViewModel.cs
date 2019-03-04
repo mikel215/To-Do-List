@@ -16,7 +16,8 @@ namespace MikelsToDoListWPF
 
         // Property variables
         private DateTime p_DisplayDate;
-        private List<string> p_HighlightedDateText;
+        private string[] p_HighlightedDateText;
+        private List<string> _duedates = new List<string>();
 
         // Member variables
         private DateTime m_OldDisplayDate;
@@ -66,10 +67,15 @@ namespace MikelsToDoListWPF
             }
         }
 
+        public DateTime DisplayDateStart
+        {
+            get { return DateTime.Today.AddMonths(-4); }
+        }
+
         /// <summary>
         /// The text to be shown in tool tips for highlighted dates.
         /// </summary>
-        public List<string> HighlightedDateText
+        public string[] HighlightedDateText
         {
             get { return p_HighlightedDateText; }
 
@@ -80,6 +86,16 @@ namespace MikelsToDoListWPF
                 base.RaisePropertyChangedEvent("HighlightedDateText");
             }
         }
+
+
+        public List<string> dueDates
+        {
+            get
+            {
+                return _duedates;
+            }
+        }
+
 
         #endregion
 
@@ -115,10 +131,7 @@ namespace MikelsToDoListWPF
         /// </summary>
         private void Initialize()
         {
-            
-
-
-            p_HighlightedDateText = new List<string>();
+            p_HighlightedDateText = new string[31];
 
             // Set the display date to today
             p_DisplayDate = DateTime.Today;
@@ -128,6 +141,18 @@ namespace MikelsToDoListWPF
 
             // Subscribe to PropertyChanged event
             this.PropertyChanged += OnPropertyChanged;
+        }
+
+        private void addDates()
+        {
+            XDocument doc = XDocument.Load(@"Tasks.xml");
+            XNamespace ns = doc.Root.Name.Namespace;
+            var dats= doc.Descendants(ns + "Due").Select(e=> e.Value).ToList();
+            foreach(string i in dats)
+            {
+                dueDates.Add(i);
+            }
+
         }
 
         /// <summary>
@@ -141,11 +166,6 @@ namespace MikelsToDoListWPF
             }
         }
 
-        // Due Date class for xml file query
-        class DueDate
-        {
-            public string due { get; set; }
-        }
 
 
         /// <summary>
@@ -161,16 +181,75 @@ namespace MikelsToDoListWPF
             var month = this.DisplayDate.Month;
             var year = this.DisplayDate.Year;
             var lastDayOfMonth = DateTime.DaysInMonth(year, month);
-            */
-            // Get xml document
-            XDocument doc = XDocument.Load(@"C:\Users\Mik\Source\Repos\MikelsToDoList\MikelsToDoListWPF\bin\Debug\Tasks.xml");
-            XNamespace ns = doc.Root.Name.Namespace;
-            var xmlDates = doc.Descendants(ns + "Due").Select(e=> e.Value).ToList();
-            var list = p_HighlightedDateText;                                                
-            list.AddRange(xmlDates);
+            
 
-                         // Refresh the calendar
-            this.RequestRefresh();
+            // Get xml document
+            for(int i = 0; i < 31; i++)
+            {
+                p_HighlightedDateText[i] = null;
+
+                foreach( var j in _duedates)
+                {
+                    string[] seps = new string[] { ",", " " };
+                    var res = j.Split(seps, StringSplitOptions.None);
+                    int day;
+                    day = int.Parse(res[3]);
+                    if(day == i + 1)
+                    {
+
+                        p_HighlightedDateText[i] = j;
+                        this.RequestRefresh();
+                    }
+                
+                }
+
+            }
+            //p_HighlightedDateText.AddRange(xmlDates);
+
+            */
+            var displayMonth = this.DisplayDate.Month;
+            var displayYear = this.DisplayDate.Year;
+
+            // Get the last day of the display month
+            var month = this.DisplayDate.Month;
+            var year = this.DisplayDate.Year;
+            var lastDayOfMonth = DateTime.DaysInMonth(year, month);
+
+            // Set the highlighted date text
+            for (var i = 0; i < 31; i++)
+            {
+                // First set this array element to null
+                p_HighlightedDateText[i] = null;
+
+                /* This demo simply highlights odd dates. So, if the array element represents 
+                 * an even date, we leave the element at its null setting and skip to the next 
+                 * increment of the loop. Note that the array is indexed from zero, while a 
+                 * calendar is indexed from one. That means odd-numbered elements represent 
+                 * even-numbered dates. So, if the index is odd, we skip. */
+
+                // If index is odd, skip to next
+                if (i % 2 == 1) continue;
+
+                /* An element may be out of range for the current month. For example, element
+                 * 30 would represent the 31st, which would be out of range for a month that 
+                 * has only 30 days. If that's the case for the current element, we leave it
+                 * set to null and skip to the next increment of the loop. */
+
+                // If element is out of range, skip to next
+                if (i >= lastDayOfMonth) continue;
+
+                /* Since the array is indexed from zero, and a calendar is indexed from one, 
+                 * we have to add one to the array index to get the calendar day to which it 
+                 * corresponds. All we do in this demo is put the Long Date String is the
+                 * HighlightedDateText array. */
+
+                // Set highlight date text
+                var targetDate = new DateTime(displayYear, displayMonth, i + 1);
+                p_HighlightedDateText[i] = targetDate.ToLongDateString();
+
+                // Refresh the calendar
+                this.RequestRefresh();
+            }
         }
 
         #endregion

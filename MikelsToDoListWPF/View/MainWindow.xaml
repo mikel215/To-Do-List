@@ -63,12 +63,10 @@
         <Button Name="DeleteButton" Grid.Row="1" Grid.Column="2" Margin="3,3,3,2" Content="Delete Task" Click="DeleteButton_Click" />
         <Viewbox Grid.Row="0" Grid.Column="3" Width="330" >
             <FsControls:FsCalendar x:Name="TaskCalendar" 
-                         
-                                   DisplayDateStart="{Binding Path=DisplayDateStart, Mode=OneTime}"
-                                   DisplayDate="{Binding Path=DisplayDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                   DisplayDateStart="1/1/2017"
+                                   DisplayDate="{Binding Path=DisplayDate, Delay=1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                    HorizontalAlignment="Center" 
-                                   HighlightedDateText="{Binding Path= HighlightedDateText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                   ShowHighlightedDateText="False"
+                                   HighlightedDateText="{Binding Path=HighlightedDateText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                                    IsTodayHighlighted="True"
                                    DateHighlightBrush="PaleGoldenrod"
                                    VerticalAlignment="Stretch" />
